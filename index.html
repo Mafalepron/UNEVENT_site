@@ -15,6 +15,9 @@
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -44,26 +47,89 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="hero-background">
-            <div class="hero-overlay"></div>
-        </div>
+        <div class="hero-overlay"></div>
         <div class="container">
             <div class="hero-content">
-                <div class="hero-services-menu">
-                    <ul>
-                        <li><a href="#city-events">МЕРОПРИЯТИЯ В ГОРОДСКИХ ЛОКАЦИЯХ</a></li>
-                        <li><a href="#corporate-events">КОРПОРАТИВНЫЕ СОБЫТИЯ</a></li>
-                        <li><a href="#multimedia">МУЛЬТИМЕДИА ДЛЯ СОБЫТИЙ</a></li>
-                        <li><a href="#artists">АРТИСТЫ И КОЛЛЕКТИВЫ</a></li>
-                        <li><a href="#digitalization">ЦИФРОВИЗАЦИЯ И ТЕХНИЧЕСКИЕ РЕШЕНИЯ</a></li>
-                        <li><a href="#quests">ЭКСКУРСИОННЫЕ КВЕСТЫ</a></li>
-                        <li><a href="#intellectual">КВИЗЫ И ИНТЕЛЛЕКТУАЛЬНЫЕ ПОЕДИНКИ</a></li>
-                        <li><a href="#training">ТРЕНИНГИ И ОБРАЗОВАНИЕ</a></li>
-                    </ul>
+                <!-- Interactive Logo -->
+                <div class="interactive-logo" id="interactiveLogo">
+                    <span class="logo-letter" id="logoU">U</span>
+                    <span class="logo-letter" id="logoN">N</span>
+                </div>
+                
+                <!-- Lightning Effects -->
+                <div class="lightning-container" id="lightningContainer">
+                    <!-- Lightning to top-left corner - shortened path -->
+                    <svg class="lightning" id="lightning1" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M50,50 L25,25 L30,30 L20,35 L27,32 L22,45 L30,40 L25,55" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
+                    </svg>
+                    <!-- Lightning to top-right corner - shortened path -->
+                    <svg class="lightning" id="lightning2" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M50,50 L75,25 L70,30 L80,35 L73,32 L78,45 L70,40 L75,55" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
+                    </svg>
+                    <!-- Lightning to bottom-left corner - shortened path -->
+                    <svg class="lightning" id="lightning3" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M50,50 L25,75 L30,70 L20,65 L27,68 L22,55 L30,60 L25,45" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
+                    </svg>
+                    <!-- Lightning to bottom-right corner - shortened path -->
+                    <svg class="lightning" id="lightning4" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M50,50 L75,75 L70,70 L80,65 L73,68 L78,55 L70,60 L75,45" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
+                    </svg>
+                    <!-- Lightning to middle-left - shortened path -->
+                    <svg class="lightning" id="lightning5" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M50,50 L30,30 L35,35 L25,40 L32,37 L28,50 L35,45 L30,60" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
+                    </svg>
+                    <!-- Lightning to middle-right - shortened path -->
+                    <svg class="lightning" id="lightning6" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M50,50 L70,30 L65,35 L75,40 L68,37 L72,50 L65,45 L70,60" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
+                    </svg>
+                    <!-- Lightning to middle-left bottom - shortened path -->
+                    <svg class="lightning" id="lightning7" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M50,50 L30,70 L35,65 L25,60 L32,63 L28,50 L35,55 L30,40" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
+                    </svg>
+                    <!-- Lightning to middle-right bottom - shortened path -->
+                    <svg class="lightning" id="lightning8" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M50,50 L70,70 L65,65 L75,60 L68,63 L72,50 L65,55 L70,40" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
+                    </svg>
+                </div>
+                
+                <!-- Event Cards -->
+                <div class="event-cards-container" id="eventCardsContainer">
+                    <div class="event-card" data-event="city-events">
+                        <div class="event-text">МЕРОПРИЯТИЯ В ГОРОДСКИХ ЛОКАЦИЯХ</div>
+                    </div>
+                    <div class="event-card" data-event="corporate-events">
+                        <div class="event-text">КОРПОРАТИВНЫЕ СОБЫТИЯ</div>
+                    </div>
+                    <div class="event-card" data-event="multimedia">
+                        <div class="event-text">МУЛЬТИМЕДИА ДЛЯ СОБЫТИЙ</div>
+                    </div>
+                    <div class="event-card" data-event="artists">
+                        <div class="event-text">АРТИСТЫ И КОЛЛЕКТИВЫ</div>
+                    </div>
+                    <div class="event-card" data-event="digitalization">
+                        <div class="event-text">ЦИФРОВИЗАЦИЯ И ТЕХНИЧЕСКИЕ РЕШЕНИЯ</div>
+                    </div>
+                    <div class="event-card" data-event="quests">
+                        <div class="event-text">ЭКСКУРСИОННЫЕ КВЕСТЫ</div>
+                    </div>
+                    <div class="event-card" data-event="intellectual">
+                        <div class="event-text">КВИЗЫ И ИНТЕЛЛЕКТУАЛЬНЫЕ ПОЕДИНКИ</div>
+                    </div>
+                    <div class="event-card" data-event="training">
+                        <div class="event-text">ТРЕНИНГИ И ОБРАЗОВАНИЕ</div>
+                    </div>
                 </div>
                 <div class="hero-main">
                     <h1 class="hero-title">
-                        ОРГАНИЗАЦИЯ ПРАЗДНИКОВ<br>
+                        ОРГАНИЗАЦИЯ МЕРОПРИЯТИЙ<br>
                         <span class="hero-location">В САНКТ-ПЕТЕРБУРГЕ</span>
                     </h1>
                     <a href="#contact" class="hero-cta-btn">СВЯЗАТЬСЯ</a>
@@ -391,5 +457,6 @@
 
     <!-- Scripts -->
     <script src="js/main.js"></script>
+    <script src="js/logo-animations.js"></script>
 </body>
 </html>

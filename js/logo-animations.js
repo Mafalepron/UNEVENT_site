@@ -2,6 +2,12 @@
 
 class LogoAnimations {
     constructor() {
+        // Check if Anime.js is loaded
+        if (typeof anime === 'undefined') {
+            console.error('Anime.js is not loaded!');
+            return;
+        }
+        
         this.logoU = document.getElementById('logoU');
         this.logoN = document.getElementById('logoN');
         this.interactiveLogo = document.getElementById('interactiveLogo');
@@ -17,6 +23,10 @@ class LogoAnimations {
     }
     
     init() {
+        console.log('LogoAnimations initialized');
+        console.log('Interactive logo element:', this.interactiveLogo);
+        console.log('Lightning container:', this.lightningContainer);
+        console.log('Event cards count:', this.eventCards.length);
         this.setupEventListeners();
     }
     
@@ -431,5 +441,17 @@ class LogoAnimations {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new LogoAnimations();
+    // Wait for Anime.js to load
+    if (typeof anime !== 'undefined') {
+        new LogoAnimations();
+    } else {
+        // Retry after a short delay
+        setTimeout(() => {
+            if (typeof anime !== 'undefined') {
+                new LogoAnimations();
+            } else {
+                console.error('Anime.js failed to load after retry');
+            }
+        }, 1000);
+    }
 });

@@ -1,0 +1,39 @@
+# GitHub Pages Configuration
+title: UNevent - Агентство Event-услуг
+description: UNevent - профессиональное агентство по организации мероприятий любого масштаба
+baseurl: ""
+url: ""
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - netlify.toml
+  - _redirects
+
+# Include files
+include:
+  - .nojekyll
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# SEO
+author: UNevent
+twitter:
+  username: unevent_spb
+  card: summary_large_image
+
+# Social
+social:
+  name: UNevent
+  links:
+    - https://instagram.com/unevent_spb
+    - https://facebook.com/unevent_spb

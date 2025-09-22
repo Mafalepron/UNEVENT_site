@@ -12,11 +12,7 @@ const dots = document.querySelectorAll('.dot');
 const prevBtn = document.querySelector('.prev-btn');
 const nextBtn = document.querySelector('.next-btn');
 
-// Video elements
-const videoCards = document.querySelectorAll('.video-card');
-const videoModal = document.getElementById('videoModal');
-const modalVideo = document.getElementById('modalVideo');
-const modalClose = document.querySelector('.video-modal-close');
+// Video elements (removed - no longer needed)
 
 // Form elements
 const contactForm = document.querySelector('.form');
@@ -28,7 +24,7 @@ let currentSlide = 0;
 document.addEventListener('DOMContentLoaded', function() {
     initNavigation();
     initSlideshow();
-    initVideoCards();
+    // Video functionality removed
     initContactForm();
     initScrollAnimations();
     initSmoothScrolling();
@@ -145,51 +141,7 @@ function showSlide(index) {
 }
 
 // ==== VIDEO MODAL ====
-function initVideoCards() {
-    videoCards.forEach(card => {
-        card.addEventListener('click', function() {
-            const videoSrc = this.getAttribute('data-video') || 'https://www.w3schools.com/html/mov_bbb.mp4';
-            openVideoModal(videoSrc);
-        });
-    });
-
-    // Close modal events
-    if (modalClose) {
-        modalClose.addEventListener('click', closeVideoModal);
-    }
-
-    if (videoModal) {
-        videoModal.addEventListener('click', function(e) {
-            if (e.target === videoModal) {
-                closeVideoModal();
-            }
-        });
-    }
-
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeVideoModal();
-        }
-    });
-}
-
-function openVideoModal(videoSrc) {
-    if (videoModal && modalVideo) {
-        modalVideo.src = videoSrc;
-        videoModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-function closeVideoModal() {
-    if (videoModal && modalVideo) {
-        videoModal.classList.remove('active');
-        modalVideo.pause();
-        modalVideo.src = '';
-        document.body.style.overflow = '';
-    }
-}
+// Video functionality removed - no longer needed
 
 // ==== CONTACT FORM ====
 function initContactForm() {

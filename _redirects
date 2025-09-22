@@ -1,0 +1,14 @@
+# Netlify redirects file
+# https://docs.netlify.com/routing/redirects/
+
+# Handle SPA routing (if needed in future)
+/*    /index.html   200
+
+# Security redirects
+/wp-admin/* /404.html 404
+/admin/* /404.html 404
+/.git/* /404.html 404
+/.env /404.html 404
+
+# Legacy URL redirects (if migrating from another site)
+# /old-page /new-page 301

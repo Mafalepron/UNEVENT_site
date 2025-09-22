@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /.git/
+Disallow: /.netlify/
+
+# Allow CSS and JS files
+Allow: /styles/
+Allow: /js/
+Allow: /images/
+
+# Sitemap location
+Sitemap: https://yourdomain.netlify.app/sitemap.xml

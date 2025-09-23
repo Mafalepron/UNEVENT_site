@@ -14,6 +14,7 @@ class LogoAnimations {
         this.lightningContainer = document.getElementById('lightningContainer');
         this.eventCardsContainer = document.getElementById('eventCardsContainer');
         this.eventCards = document.querySelectorAll('.event-card');
+        this.brightFlash = document.getElementById('lightningBrightFlash');
         
         this.isAnimating = false;
         this.isPulsing = false;
@@ -23,79 +24,30 @@ class LogoAnimations {
     }
     
     init() {
-        console.log('LogoAnimations initialized');
-        console.log('Interactive logo element:', this.interactiveLogo);
-        console.log('Lightning container:', this.lightningContainer);
-        console.log('Event cards count:', this.eventCards.length);
         this.setupEventListeners();
     }
     
     setupEventListeners() {
-        // Hover effects for both letters and entire logo area
-        this.logoU.addEventListener('mouseenter', () => this.onLogoHover());
-        this.logoN.addEventListener('mouseenter', () => this.onLogoHover());
-        this.interactiveLogo.addEventListener('mouseenter', () => this.onLogoHover());
-        
-        this.logoU.addEventListener('mouseleave', () => this.onLogoLeave());
-        this.logoN.addEventListener('mouseleave', () => this.onLogoLeave());
-        this.interactiveLogo.addEventListener('mouseleave', () => this.onLogoLeave());
-        
         // Click effect for the entire logo
-        this.interactiveLogo.addEventListener('click', () => this.onLogoClick());
-    }
-    
-    onLogoHover() {
-        if (this.isAnimating) return;
-        
-        // Scale up both letters
-        anime({
-            targets: [this.logoU, this.logoN],
-            scale: 2,
-            color: 'rgba(255, 215, 0, 0.8)',
-            textShadow: '0 0 100px rgba(255, 215, 0, 0.8)',
-            duration: 300,
-            easing: 'easeOutQuad'
-        });
-        
-        // Start pulsing after scale animation
-        setTimeout(() => {
-            if (!this.isPulsing) {
-                this.startPulsing();
-            }
-        }, 300);
-    }
-    
-    onLogoLeave() {
-        if (this.isAnimating) return;
-        
-        this.stopPulsing();
-        
-        // Scale back down
-        anime({
-            targets: [this.logoU, this.logoN],
-            scale: 1,
-            color: 'rgba(255, 215, 0, 0.15)',
-            textShadow: '0 0 50px rgba(255, 215, 0, 0.3)',
-            duration: 300,
-            easing: 'easeOutQuad'
-        });
+        if (this.interactiveLogo) {
+            this.interactiveLogo.addEventListener('click', () => this.onLogoClick());
+        }
     }
     
     startPulsing() {
         this.isPulsing = true;
         
-        anime({
-            targets: [this.logoU, this.logoN],
-            scale: [2, 2.1, 2],
-            duration: 800,
-            easing: 'easeInOutQuad',
-            loop: true
-        });
+        // Add pulsing class to both letters
+        this.logoU.classList.add('pulsing');
+        this.logoN.classList.add('pulsing');
     }
     
     stopPulsing() {
         this.isPulsing = false;
-        anime.remove([this.logoU, this.logoN]);
+        
+        // Remove pulsing class from both letters
+        this.logoU.classList.remove('pulsing');
+        this.logoN.classList.remove('pulsing');
     }
     
     onLogoClick() {
@@ -122,7 +74,7 @@ class LogoAnimations {
         // Add random lightning flashes for realism
         this.addRandomLightningFlashes();
         
-        // Start the sequential animation
+        // Start the sequential animation from the first lightning (index 0)
         this.animateLightningSequence(lightnings, 0);
     }
     
@@ -130,6 +82,10 @@ class LogoAnimations {
         if (index >= lightnings.length) {
             // All lightnings completed
             this.isAnimating = false;
+            // Start UNevent text animation after all cards appear
+            setTimeout(() => {
+                this.animateUneventText();
+            }, 1000); // Wait 1 second after last card appears
             return;
         }
         
@@ -154,7 +110,7 @@ class LogoAnimations {
             // After this lightning completes, start the next one
             setTimeout(() => {
                 this.animateLightningSequence(lightnings, index + 1);
-            }, 400); // Shorter delay for shortened lightnings
+            }, 200); // Speed up: Shorter delay for shortened lightnings
         });
     }
     
@@ -190,6 +146,29 @@ class LogoAnimations {
         });
     }
     
+    getExactEndPoint(path, lightningIndex) {
+        // Extract exact end coordinates from SVG path data
+        const pathData = path.getAttribute('d');
+        const coordinates = pathData.match(/L(\d+),(\d+)/g);
+        
+        if (coordinates && coordinates.length > 0) {
+            // Get the last L command (last line segment)
+            const lastCoord = coordinates[coordinates.length - 1];
+            const match = lastCoord.match(/L(\d+),(\d+)/);
+            if (match) {
+                return {
+                    x: parseFloat(match[1]),
+                    y: parseFloat(match[2])
+                };
+            }
+        }
+        
+        // Fallback to calculated end point if parsing fails
+        const pathLength = path.getTotalLength();
+        const point = path.getPointAtLength(pathLength);
+        return { x: point.x, y: point.y };
+    }
+    
     animateLightningGrowth(dot, path, lightningIndex, delay, onComplete) {
         // Get path length for dot animation
         const pathLength = path.getTotalLength();
@@ -201,88 +180,92 @@ class LogoAnimations {
             pathPoints.push({ x: point.x, y: point.y });
         }
         
-        // Get end point for flash effect
-        const endPoint = pathPoints[pathPoints.length - 1];
+        // Get end point for flash effect - use exact coordinates from SVG path
+        const endPoint = this.getExactEndPoint(path, lightningIndex);
         
-        // Set initial position of dot at start of path
-        const startPoint = pathPoints[0];
-        dot.setAttribute('cx', startPoint.x);
-        dot.setAttribute('cy', startPoint.y);
+        // Since SVG has viewBox="0 0 100 100" and preserveAspectRatio="none",
+        // the coordinates are already in percentage (0-100)
+        // We just need to ensure they're within bounds
+        endPoint.x = Math.max(0, Math.min(100, endPoint.x));
+        endPoint.y = Math.max(0, Math.min(100, endPoint.y));
         
-        // Animate dot moving along the path while drawing the lightning
-        anime({
-            targets: dot,
-            duration: 600, // Shorter duration for shortened paths
-            easing: 'easeOutQuad',
-            delay: delay,
+        // Debug: log the exact end point
+        console.log(`Lightning ${lightningIndex} calculated end point:`, endPoint);
+        
+        // Reset flash trigger flag for this lightning
+        this.flashTriggered = false;
+        
+        // Hide the dot completely
+        dot.style.opacity = '0';
+        
+        // Set up the path for drawing animation - start from 1/3 of the path
+        const startOffset = pathLength / 3;
+        path.style.strokeDasharray = `${pathLength - startOffset} ${pathLength}`;
+        path.style.strokeDashoffset = pathLength - startOffset;
+        path.style.opacity = '1';
+        
+            // Animate lightning path drawing without dot
+            anime({
+                targets: path,
+                duration: 200, // Speed up: 300ms -> 200ms
+                easing: 'easeOutQuad',
+                delay: delay,
             update: (anim) => {
                 const progress = anim.progress / 100;
-                const pointIndex = Math.floor(progress * (pathPoints.length - 1));
-                const point = pathPoints[pointIndex];
-                if (point) {
-                    // Add more pronounced diagonal movement and jitter
-                    const jitterX = (Math.random() - 0.5) * 1.0; // Increased jitter
-                    const jitterY = (Math.random() - 0.5) * 1.0;
-                    
-                    // Add diagonal movement based on progress
-                    const diagonalOffset = Math.sin(progress * Math.PI * 4) * 0.5;
-                    const finalX = point.x + jitterX + diagonalOffset;
-                    const finalY = point.y + jitterY + diagonalOffset;
-                    
-                    dot.setAttribute('cx', finalX);
-                    dot.setAttribute('cy', finalY);
-                    
-                    // Add more dynamic flickering effect
-                    const flicker = 0.6 + Math.random() * 0.8; // Random opacity between 0.6 and 1.4
-                    dot.style.opacity = flicker;
-                    
-                    // Add size variation for more dynamic effect
-                    const sizeVariation = 0.3 + Math.random() * 0.4; // Size between 0.3 and 0.7
-                    dot.setAttribute('r', sizeVariation);
-                }
                 
-                // Update lightning path to show the part that dot has traveled
-                const currentLength = pathLength * progress;
+                // Calculate current length from the trimmed start point
+                const currentLength = startOffset + (pathLength - startOffset) * progress;
                 
-                // Show the path from start to current position
-                path.style.strokeDasharray = `${currentLength} ${pathLength}`;
-                path.style.strokeDashoffset = '0';
-                path.style.opacity = '1';
+                // Draw the path from trimmed start to current position
+                path.style.strokeDashoffset = pathLength - currentLength;
                 
                 // Add subtle lightning shake effect
                 const shakeX = (Math.random() - 0.5) * 0.3;
                 const shakeY = (Math.random() - 0.5) * 0.3;
                 path.style.transform = `translate(${shakeX}px, ${shakeY}px)`;
+                
+                // Trigger flash when lightning is 80% drawn (from trimmed start)
+                if (progress >= 0.8 && !this.flashTriggered) {
+                    this.flashTriggered = true;
+                    this.createLightningFlash(endPoint, lightningIndex, () => {
+                        setTimeout(() => {
+                            this.showEventCard(lightningIndex, endPoint);
+                        }, 50);
+                    });
+                }
             },
             complete: () => {
-                // Fade out the lightning path gradually
-                anime({
-                    targets: path,
-                    opacity: 0,
-                    duration: 200,
-                    easing: 'easeOutQuad',
-                    complete: () => {
-                        // Reset strokeDasharray to hide the lightning path
-                        path.style.strokeDasharray = '0 1000';
-                        path.style.opacity = '0';
-                    }
-                });
-                
-                // Hide dot immediately
-                dot.style.opacity = '0';
-                
-                // Create and animate flash effect, then show event card
-                this.createLightningFlash(endPoint, lightningIndex, () => {
-                    // Show event card after flash with small delay
-                    setTimeout(() => {
-                        this.showEventCard(lightningIndex, endPoint);
-                        
-                        // Call the completion callback to start next lightning
+                // Start the trail disappearing effect after a short delay
+                setTimeout(() => {
+                    this.animateLightningTrailDisappear(path, pathLength, () => {
+                        // Flash and card already shown during drawing, just complete
                         if (onComplete) {
                             onComplete();
                         }
-                    }, 200); // Small delay to let user see the flash
-                });
+                    });
+                }, 100); // Speed up: Wait 0.1 second before starting trail disappear
+            }
+        });
+    }
+    
+    animateLightningTrailDisappear(path, pathLength, onComplete) {
+        // Animate the trail disappearing by moving the dash offset
+        // Calculate the start offset for the trimmed path
+        const startOffset = pathLength / 3;
+        anime({
+            targets: path,
+            strokeDashoffset: pathLength,
+            duration: 250, // Speed up: Trail disappears over 0.25 seconds
+            easing: 'easeInQuad',
+            complete: () => {
+                // Reset and hide the path
+                path.style.strokeDasharray = '0 1000';
+                path.style.opacity = '0';
+                path.style.strokeDashoffset = '0';
+                
+                if (onComplete) {
+                    onComplete();
+                }
             }
         });
     }
@@ -299,85 +282,125 @@ class LogoAnimations {
         // Debug: log flash position
         console.log(`Flash ${lightningIndex} position:`, endPoint.x + '%', endPoint.y + '%');
         
-        // Store flash position for event card
-        this.lastFlashPosition = { x: endPoint.x, y: endPoint.y };
+        // Store flash position for event card (convert % to pixels)
+        const containerRect = this.lightningContainer.getBoundingClientRect();
+        this.lastFlashPosition = { 
+            x: (endPoint.x / 100) * containerRect.width + containerRect.left, 
+            y: (endPoint.y / 100) * containerRect.height + containerRect.top 
+        };
         
         // Animate flash
         anime({
             targets: flash,
             opacity: [0, 1, 0],
             scale: [0, 3, 0],
-            duration: 300,
+            duration: 200,
             easing: 'easeOutQuad',
             complete: () => {
                 // Remove flash element
                 flash.remove();
                 
-                // Call completion callback
-                if (onComplete) {
-                    onComplete();
-                }
+                // Create bright flash effect
+                this.createBrightFlash(() => {
+                    // Call completion callback after bright flash
+                    if (onComplete) {
+                        onComplete();
+                    }
+                });
             }
         });
     }
     
+    createBrightFlash(onComplete) {
+        if (!this.brightFlash) return;
+        
+        // Position the flash at the lightning end point
+        if (this.lastFlashPosition) {
+            this.brightFlash.style.left = (this.lastFlashPosition.x - 200) + 'px'; // Center the 400px flash
+            this.brightFlash.style.top = (this.lastFlashPosition.y - 200) + 'px';
+        }
+        
+        // Reset and show bright flash
+        this.brightFlash.classList.remove('flash-active');
+        this.brightFlash.style.opacity = '0';
+        this.brightFlash.style.transform = 'scale(0.8)';
+        
+        // Trigger the flash animation
+        setTimeout(() => {
+            this.brightFlash.classList.add('flash-active');
+            
+            // Remove the class after animation completes
+            setTimeout(() => {
+                this.brightFlash.classList.remove('flash-active');
+                
+                if (onComplete) {
+                    onComplete();
+                }
+            }, 200); // Match the CSS animation duration
+        }, 50); // Small delay to ensure the class removal is processed
+    }
+    
+    
     showEventCard(lightningIndex, endPoint) {
         const eventCard = this.eventCards[lightningIndex];
         if (eventCard) {
-            // Use the exact same coordinates as the flash
-            let finalX = this.lastFlashPosition ? this.lastFlashPosition.x : endPoint.x;
-            let finalY = this.lastFlashPosition ? this.lastFlashPosition.y : endPoint.y;
+            // Use the exact coordinates where lightning ended
+            let finalX = endPoint.x;
+            let finalY = endPoint.y;
             
             // Debug: log coordinates
             console.log(`Lightning ${lightningIndex} end point:`, endPoint);
-            console.log(`Using flash position:`, finalX, finalY);
+            console.log(`Card position:`, finalX + '%', finalY + '%');
             
-            // Exclude the area with title and button (center-right area)
-            // Title area: roughly 60-90% horizontal, 30-60% vertical
-            const isInTitleArea = finalX >= 60 && finalX <= 90 && finalY >= 30 && finalY <= 60;
-            
-            if (isInTitleArea) {
-                // Move to a different area - prefer corners and edges
-                if (finalX > 50) {
-                    // Move to right edge
-                    finalX = 85 + Math.random() * 10; // 85-95%
-                } else {
-                    // Move to left edge
-                    finalX = 5 + Math.random() * 10; // 5-15%
-                }
-                
-                if (finalY > 50) {
-                    // Move to bottom area
-                    finalY = 70 + Math.random() * 15; // 70-85%
-                } else {
-                    // Move to top area
-                    finalY = 15 + Math.random() * 15; // 15-30%
-                }
-            }
-            
-            // Ensure cards don't overlap with logo area
+            // Only adjust if the card would be too close to the center (logo area)
             const centerX = 50;
             const centerY = 50;
             const distanceFromCenter = Math.sqrt(Math.pow(finalX - centerX, 2) + Math.pow(finalY - centerY, 2));
             
-            // If too close to center (logo area), move further out
-            if (distanceFromCenter < 35) {
+            // If too close to center (logo area), move slightly away
+            if (distanceFromCenter < 25) {
                 const angle = Math.atan2(finalY - centerY, finalX - centerX);
-                const farDistance = 40; // Move to at least 40% from center
-                finalX = centerX + Math.cos(angle) * farDistance;
-                finalY = centerY + Math.sin(angle) * farDistance;
+                const minDistance = 30; // Move to at least 30% from center
+                finalX = centerX + Math.cos(angle) * minDistance;
+                finalY = centerY + Math.sin(angle) * minDistance;
             }
             
-            // Add small random offset to avoid overlapping cards
-            const randomOffsetX = (Math.random() - 0.5) * 4; // ±2%
-            const randomOffsetY = (Math.random() - 0.5) * 4; // ±2%
-            finalX += randomOffsetX;
-            finalY += randomOffsetY;
-            
             // Ensure cards stay within safe bounds
-            // Header area: top 10%, Footer area: bottom 15%
-            finalX = Math.max(5, Math.min(95, finalX)); // Keep away from edges
-            finalY = Math.max(10, Math.min(85, finalY)); // Keep away from header (10%) and footer (15%)
+            finalX = Math.max(10, Math.min(90, finalX)); // Keep away from edges with more margin
+            finalY = Math.max(15, Math.min(80, finalY)); // Keep away from header and footer with more margin
+            
+            // Special positioning for Corporate Events card (lightning2) - return to original position
+            if (lightningIndex === 1) { // Corporate Events card is index 1 (0-based)
+                // No special positioning - use original lightning end point
+            }
+            
+            // Special positioning for Multimedia card (lightning3) - place under letter "U" and closer to bottom, then lower by half card height
+            if (lightningIndex === 2) { // Multimedia card is index 2 (0-based)
+                finalX = 30; // Position under letter "U" (30% from left)
+                finalY = 80; // Position closer to bottom (75% from top) + half card height (5%)
+            }
+            
+            // Special positioning for Artists card (lightning4) - move right by 2x card width
+            if (lightningIndex === 3) { // Artists card is index 3 (0-based)
+                finalX = Math.min(90, finalX + 20); // Move right by 20% (2x card width) but keep within bounds
+            }
+            
+            // Special positioning for Digitalization card (lightning5) - move left by 2x card width + half card width + half card width
+            if (lightningIndex === 4) { // Digitalization card is index 4 (0-based)
+                finalX = Math.max(5, finalX - 20); // Move left by 20% (2x card width + half card width + half card width) but keep within bounds
+            }
+            
+            // Special positioning for Quests card (lightning6) - move down by card height + 1/3 card height - 1/4 card height and left by 1/3 card width
+            if (lightningIndex === 5) { // Quests card is index 5 (0-based)
+                finalY = Math.min(80, finalY + 10); // Move down by 10% (card height + 1/3 card height - 1/4 card height) but keep within bounds
+                finalX = Math.max(10, finalX - 3); // Move left by 3% (1/3 card width) but keep within bounds
+            }
+            
+            // Special positioning for Training card (lightning8) - move up by half card height and left by 1.5 card width
+            if (lightningIndex === 7) { // Training card is index 7 (0-based)
+                finalY = Math.max(15, finalY - 5); // Move up by 5% (half card height) but keep within bounds
+                finalX = Math.max(10, finalX - 7); // Move left by 7% (1.5 card width) but keep within bounds
+            }
             
             // Set position exactly where lightning ended
             eventCard.style.left = finalX + '%';
@@ -436,6 +459,35 @@ class LogoAnimations {
             card.style.transform = 'scale(0.5)';
             card.classList.remove('flash-effect', 'show-text');
         });
+    }
+    
+    animateUneventText() {
+        const letters = ['letterU', 'letterN', 'letterE1', 'letterV', 'letterE2', 'letterN2', 'letterT'];
+        let currentLetter = 0;
+        
+        const animateNextLetter = () => {
+            if (currentLetter < letters.length) {
+                const letterElement = document.getElementById(letters[currentLetter]);
+                if (letterElement) {
+                    letterElement.classList.add('animate');
+                    currentLetter++;
+                    setTimeout(animateNextLetter, 400); // Delay between letters
+                }
+            } else {
+                // All letters animated, hide text after 3 seconds
+                setTimeout(() => {
+                    letters.forEach(letterId => {
+                        const letterElement = document.getElementById(letterId);
+                        if (letterElement) {
+                            letterElement.style.opacity = '0';
+                        }
+                    });
+                }, 3000);
+            }
+        };
+        
+        // Start animation
+        animateNextLetter();
     }
 }
 

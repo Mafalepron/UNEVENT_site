@@ -234,12 +234,17 @@ body {
     transition: all 0.3s ease;
     display: inline-block;
     margin: 0 40px; /* Increased margin for better spacing */
+    transform-origin: center;
 }
 
-.logo-letter:hover {
-    transform: scale(1.5); /* Reduced scale for larger letters */
+/* Individual letter hover removed - now handled by JavaScript for entire logo area */
+
+/* Hover state for entire logo area */
+.interactive-logo:hover .logo-letter {
+    transform: scale(2);
     color: rgba(255, 215, 0, 0.8);
     text-shadow: 0 0 100px rgba(255, 215, 0, 0.8);
+    animation: logoPulse 0.8s ease-in-out infinite alternate;
 }
 
 .logo-letter.pulsing {
@@ -248,10 +253,10 @@ body {
 
 @keyframes logoPulse {
     0% {
-        transform: scale(1.5);
+        transform: scale(2);
     }
     100% {
-        transform: scale(1.6);
+        transform: scale(2.1);
     }
 }
 
@@ -277,7 +282,7 @@ body {
 .lightning path {
     stroke-dasharray: 0 1000;
     stroke-dashoffset: 0;
-    filter: drop-shadow(0 0 6px #ffff00) drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 18px #ffd700);
+    filter: drop-shadow(0 0 8px rgba(255, 255, 0, 0.9)) drop-shadow(0 0 16px rgba(255, 255, 0, 0.7)) drop-shadow(0 0 24px rgba(255, 215, 0, 0.5)) drop-shadow(0 0 32px rgba(255, 215, 0, 0.3));
     stroke-linecap: round;
     stroke-linejoin: round;
     opacity: 0;
@@ -286,7 +291,7 @@ body {
 }
 
 .lightning-dot {
-    filter: drop-shadow(0 0 4px #ffff00) drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 12px #ffd700);
+    filter: drop-shadow(0 0 6px rgba(255, 255, 0, 0.9)) drop-shadow(0 0 12px rgba(255, 255, 0, 0.7)) drop-shadow(0 0 18px rgba(255, 215, 0, 0.5)) drop-shadow(0 0 24px rgba(255, 215, 0, 0.3));
     opacity: 0;
 }
 
@@ -318,8 +323,8 @@ body {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
     border: 2px solid rgba(255, 215, 0, 0.6);
     border-radius: 15px;
-    padding: 15px 20px;
-    font-size: 14px;
+    padding: 22px 30px;
+    font-size: 21px;
     font-weight: 600;
     color: #1f2937;
     text-align: center;
@@ -327,8 +332,9 @@ body {
     opacity: 0;
     transform: scale(0.5);
     transition: all 0.3s ease;
-    max-width: 200px;
+    max-width: 300px;
     word-wrap: break-word;
+    min-height: 180px;
     line-height: 1.3;
 }
 
@@ -345,8 +351,8 @@ body {
     background: rgba(255, 255, 255, 0.95);
     border: 2px solid #ffff00;
     border-radius: 8px;
-    padding: 12px 16px;
-    font-size: 12px;
+    padding: 18px 24px;
+    font-size: 18px;
     font-weight: bold;
     color: #333;
     text-align: center;
@@ -355,6 +361,7 @@ body {
     transform: scale(0);
     transition: all 0.3s ease;
     z-index: 1000;
+    min-height: 180px;
     min-width: 200px;
     max-width: 250px;
     word-wrap: break-word;
@@ -607,12 +614,61 @@ body {
     transition: all 0.3s;
     text-transform: uppercase;
     letter-spacing: 1px;
+    margin-top: -120px !important; /* Поднимаем кнопку выше на две высоты кнопки */
+    transform: translateY(-60px); /* Дополнительный сдвиг вверх */
 }
 
 .hero-cta-btn:hover {
     background: #5a5fd7;
-    transform: translateY(-2px);
+    transform: translateY(-62px); /* -60px базовый + -2px hover */
     box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+}
+
+/* ==== UNEVENT TEXT ANIMATION ==== */
+.unevent-text-container {
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    pointer-events: none;
+}
+
+.unevent-text-svg {
+    width: 500px;
+    height: 240px;
+}
+
+.unevent-letter {
+    font-family: 'Satisfy', cursive;
+    font-size: 144px;
+    fill: #ff7eb2;
+    stroke: #e44082;
+    stroke-width: 2;
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.unevent-letter.animate {
+    opacity: 1;
+    animation: drawLetter 0.8s ease-in-out forwards;
+}
+
+@keyframes drawLetter {
+    0% {
+        stroke-dashoffset: 200;
+        fill-opacity: 0;
+    }
+    50% {
+        stroke-dashoffset: 100;
+        fill-opacity: 0.5;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        fill-opacity: 1;
+    }
 }
 
 /* ==== STATISTICS ==== */
@@ -1231,9 +1287,10 @@ body {
     }
     
     .event-card {
-        font-size: 12px;
-        padding: 12px 15px;
-        max-width: 180px;
+        font-size: 18px;
+        padding: 18px 22px;
+        max-width: 270px;
+        min-height: 180px;
     }
 }
 
@@ -1244,9 +1301,10 @@ body {
     }
     
     .event-card {
-        font-size: 11px;
-        padding: 10px 12px;
-        max-width: 160px;
+        font-size: 16px;
+        padding: 15px 18px;
+        max-width: 240px;
+        min-height: 180px;
     }
 }
 
@@ -1257,9 +1315,10 @@ body {
     }
     
     .event-card {
-        font-size: 10px;
-        padding: 8px 10px;
-        max-width: 140px;
+        font-size: 15px;
+        padding: 12px 15px;
+        max-width: 210px;
+        min-height: 180px;
     }
 }
     
@@ -1273,5 +1332,70 @@ body {
     
     .clients-logos {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Lightning Glow Effect */
+.lightning path {
+    filter: 
+        drop-shadow(0 0 8px rgba(255, 255, 0, 0.9)) 
+        drop-shadow(0 0 16px rgba(255, 255, 0, 0.7)) 
+        drop-shadow(0 0 24px rgba(255, 215, 0, 0.5)) 
+        drop-shadow(0 0 32px rgba(255, 215, 0, 0.3));
+    stroke-width: 0.15; /* Make lightning even thinner */
+    stroke: #ffff80;
+}
+
+/* Lightning Flash Effect */
+.lightning-bright-flash {
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    background: 
+        radial-gradient(ellipse 200px 100px at center, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 20%, rgba(255, 255, 255, 0.2) 40%, transparent 70%),
+        radial-gradient(ellipse 300px 150px at center, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 60%),
+        radial-gradient(ellipse 400px 200px at center, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0;
+    transform: scale(0.5);
+    transform-origin: center;
+    filter: blur(1px);
+}
+
+.lightning-bright-flash.flash-active {
+    animation: brightFlash 0.2s ease-out;
+}
+
+@keyframes brightFlash {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+        filter: blur(3px);
+    }
+    15% {
+        opacity: 1;
+        transform: scale(1.2);
+        filter: blur(2px);
+    }
+    30% {
+        opacity: 0.9;
+        transform: scale(1.5);
+        filter: blur(1px);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.8);
+        filter: blur(0.5px);
+    }
+    70% {
+        opacity: 0.3;
+        transform: scale(2.2);
+        filter: blur(0px);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(2.5);
+        filter: blur(1px);
     }
 }

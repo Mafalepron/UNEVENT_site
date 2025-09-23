@@ -8,16 +8,19 @@
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="styles/lanaevent-style.css" onerror="console.error('Failed to load lanaevent-style.css')">
+    <link rel="stylesheet" href="styles/lanaevent-style.css?v=2" onerror="console.error('Failed to load lanaevent-style.css')">
     <link rel="stylesheet" href="styles/placeholders.css" onerror="console.error('Failed to load placeholders.css')">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- Anime.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdB5ptb2osYk5At1eT3ry+oif2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    
 </head>
 <body>
     <!-- Header -->
@@ -56,49 +59,65 @@
                     <span class="logo-letter" id="logoN">N</span>
                 </div>
                 
-                <!-- Lightning Effects -->
-                <div class="lightning-container" id="lightningContainer">
-                    <!-- Lightning to top-left corner - shortened path -->
-                    <svg class="lightning" id="lightning1" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <path d="M50,50 L25,25 L30,30 L20,35 L27,32 L22,45 L30,40 L25,55" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
-                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
-                    </svg>
-                    <!-- Lightning to top-right corner - shortened path -->
-                    <svg class="lightning" id="lightning2" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <path d="M50,50 L75,25 L70,30 L80,35 L73,32 L78,45 L70,40 L75,55" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
-                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
-                    </svg>
-                    <!-- Lightning to bottom-left corner - shortened path -->
-                    <svg class="lightning" id="lightning3" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <path d="M50,50 L25,75 L30,70 L20,65 L27,68 L22,55 L30,60 L25,45" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
-                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
-                    </svg>
-                    <!-- Lightning to bottom-right corner - shortened path -->
-                    <svg class="lightning" id="lightning4" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <path d="M50,50 L75,75 L70,70 L80,65 L73,68 L78,55 L70,60 L75,45" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
-                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
-                    </svg>
-                    <!-- Lightning to middle-left - shortened path -->
-                    <svg class="lightning" id="lightning5" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <path d="M50,50 L30,30 L35,35 L25,40 L32,37 L28,50 L35,45 L30,60" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
-                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
-                    </svg>
-                    <!-- Lightning to middle-right - shortened path -->
-                    <svg class="lightning" id="lightning6" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <path d="M50,50 L70,30 L65,35 L75,40 L68,37 L72,50 L65,45 L70,60" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
-                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
-                    </svg>
-                    <!-- Lightning to middle-left bottom - shortened path -->
-                    <svg class="lightning" id="lightning7" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <path d="M50,50 L30,70 L35,65 L25,60 L32,63 L28,50 L35,55 L30,40" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
-                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
-                    </svg>
-                    <!-- Lightning to middle-right bottom - shortened path -->
-                    <svg class="lightning" id="lightning8" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <path d="M50,50 L70,70 L65,65 L75,60 L68,63 L72,50 L65,55 L70,40" stroke="#ffff00" stroke-width="0.3" fill="none" opacity="0"/>
-                        <circle class="lightning-dot" cx="50" cy="50" r="0.3" fill="#ffff00" opacity="0"/>
+                <!-- UNevent Text Animation -->
+                <div class="unevent-text-container" id="uneventTextContainer">
+                    <svg class="unevent-text-svg" id="uneventTextSvg" viewBox="0 0 500 240" preserveAspectRatio="xMidYMid meet">
+                        <text class="unevent-letter" id="letterU" x="50" y="150" font-family="Satisfy, cursive" font-size="144" fill="#e44082" stroke="#e44082" stroke-width="2" opacity="0">U</text>
+                        <text class="unevent-letter" id="letterN" x="120" y="150" font-family="Satisfy, cursive" font-size="144" fill="#e44082" stroke="#e44082" stroke-width="2" opacity="0">N</text>
+                        <text class="unevent-letter" id="letterE1" x="190" y="150" font-family="Satisfy, cursive" font-size="144" fill="#e44082" stroke="#e44082" stroke-width="2" opacity="0">e</text>
+                        <text class="unevent-letter" id="letterV" x="250" y="150" font-family="Satisfy, cursive" font-size="144" fill="#e44082" stroke="#e44082" stroke-width="2" opacity="0">v</text>
+                        <text class="unevent-letter" id="letterE2" x="310" y="150" font-family="Satisfy, cursive" font-size="144" fill="#e44082" stroke="#e44082" stroke-width="2" opacity="0">e</text>
+                        <text class="unevent-letter" id="letterN2" x="370" y="150" font-family="Satisfy, cursive" font-size="144" fill="#e44082" stroke="#e44082" stroke-width="2" opacity="0">n</text>
+                        <text class="unevent-letter" id="letterT" x="420" y="150" font-family="Satisfy, cursive" font-size="144" fill="#e44082" stroke="#e44082" stroke-width="2" opacity="0">t</text>
                     </svg>
                 </div>
+                
+                <!-- Lightning Effects -->
+                <div class="lightning-container" id="lightningContainer">
+                    <!-- Lightning to top-left corner - starts from U border -->
+                    <svg class="lightning" id="lightning1" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M65,45 L67,42 L69,39 L71,36 L73,33 L75,30 L77,27 L75,25 L70,20 L60,15 L50,10 L55,5 L45,0 L50,5 L60,0 L70,5 L80,10 L75,15 L85,20 L80,25 L90,30" stroke="#ffff80" stroke-width="0.15" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="65" cy="45" r="0.2" fill="#ffff80" opacity="0"/>
+                    </svg>
+        <!-- Lightning to top-right corner - starts from N border -->
+        <svg class="lightning" id="lightning2" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M65,45 L67,42 L69,39 L71,36 L73,33 L75,30 L77,27 L75,25 L70,20 L60,15 L50,10 L55,5 L45,0 L50,5 L60,0 L70,5 L80,10 L75,15 L85,20 L80,25 L70,15" stroke="#ffff80" stroke-width="0.15" fill="none" opacity="0"/>
+            <circle class="lightning-dot" cx="65" cy="45" r="0.2" fill="#ffff80" opacity="0"/>
+        </svg>
+                    <!-- Lightning to bottom-left corner - starts from U bottom -->
+                    <svg class="lightning" id="lightning3" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M30,50 L28,52 L26,54 L24,56 L22,58 L20,60 L18,62 L16,64 L18,66 L20,68 L22,70 L24,72 L26,74 L28,76 L30,80" stroke="#ffff80" stroke-width="0.15" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="30" cy="50" r="0.2" fill="#ffff80" opacity="0"/>
+                    </svg>
+                    <!-- Lightning to bottom-right corner - starts from N bottom -->
+                    <svg class="lightning" id="lightning4" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M65,55 L63,58 L61,61 L59,64 L57,67 L55,70 L53,73 L55,75 L60,80 L70,75 L80,80 L85,85 L90,85" stroke="#ffff80" stroke-width="0.15" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="65" cy="55" r="0.2" fill="#ffff80" opacity="0"/>
+                    </svg>
+                    <!-- Lightning to left edge - starts from U left side -->
+                    <svg class="lightning" id="lightning5" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M30,50 L28,52 L26,54 L24,56 L22,58 L20,60 L18,62 L16,64 L18,66 L20,68 L22,70 L24,72 L26,74 L28,76 L10,75" stroke="#ffff80" stroke-width="0.15" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="30" cy="50" r="0.2" fill="#ffff80" opacity="0"/>
+                    </svg>
+                    <!-- Lightning to right edge - starts from N right side -->
+                    <svg class="lightning" id="lightning6" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M70,50 L72,50 L74,50 L76,50 L78,50 L80,50 L82,50 L84,50 L82,48 L88,42 L92,45" stroke="#ffff80" stroke-width="0.15" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="70" cy="50" r="0.2" fill="#ffff80" opacity="0"/>
+                    </svg>
+                    <!-- Lightning to top edge - starts from U top -->
+                    <svg class="lightning" id="lightning7" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M35,35 L37,32 L39,29 L41,26 L43,23 L45,20 L47,17 L45,15 L40,10 L30,15 L20,10 L25,5 L15,0 L20,5 L10,10" stroke="#ffff80" stroke-width="0.15" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="35" cy="35" r="0.2" fill="#ffff80" opacity="0"/>
+                    </svg>
+                    <!-- Lightning to bottom edge - starts from N bottom -->
+                    <svg class="lightning" id="lightning8" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M65,65 L68,70 L64,75 L72,78 L66,82 L74,85 L70,88 L78,90 L75,92 L82,94 L80,96 L85,98 L81,95" stroke="#ffff80" stroke-width="0.15" fill="none" opacity="0"/>
+                        <circle class="lightning-dot" cx="65" cy="65" r="0.2" fill="#ffff80" opacity="0"/>
+                    </svg>
+                </div>
+                
+                <!-- Bright Flash Effect -->
+                <div class="lightning-bright-flash" id="lightningBrightFlash"></div>
                 
                 <!-- Event Cards -->
                 <div class="event-cards-container" id="eventCardsContainer">
@@ -457,6 +476,6 @@
 
     <!-- Scripts -->
     <script src="js/main.js"></script>
-    <script src="js/logo-animations.js"></script>
+    <script src="js/logo-animations.js?v=2"></script>
 </body>
 </html>

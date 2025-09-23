@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="styles/lanaevent-style.css?v=2" onerror="console.error('Failed to load lanaevent-style.css')">
+    <link rel="stylesheet" href="styles/lanaevent-style.css?v=4" onerror="console.error('Failed to load lanaevent-style.css')">
     <link rel="stylesheet" href="styles/placeholders.css" onerror="console.error('Failed to load placeholders.css')">
     
     <!-- Icons -->
@@ -59,6 +59,19 @@
                     <span class="logo-letter" id="logoN">N</span>
                 </div>
                 
+                <!-- Click Arrow Indicator -->
+                <div class="click-indicator" id="clickIndicator">
+                    <div class="click-text">Нажми</div>
+                    <div class="click-arrow">
+                        <svg viewBox="0 0 200 100" class="arrow-svg">
+                            <g class="arrow-group">
+                                <path d="M20,80 Q100,20 187,87" stroke="#ffff00" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <polygon points="174,75 184,80 175,85" fill="#ffff00" transform="translate(7, 7) rotate(45 180 80)"/>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                
                 <!-- UNevent Text Animation -->
                 <div class="unevent-text-container" id="uneventTextContainer">
                     <svg class="unevent-text-svg" id="uneventTextSvg" viewBox="0 0 500 240" preserveAspectRatio="xMidYMid meet">
@@ -81,7 +94,7 @@
                     </svg>
         <!-- Lightning to top-right corner - starts from N border -->
         <svg class="lightning" id="lightning2" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M65,45 L67,42 L69,39 L71,36 L73,33 L75,30 L77,27 L75,25 L70,20 L60,15 L50,10 L55,5 L45,0 L50,5 L60,0 L70,5 L80,10 L75,15 L85,20 L80,25 L70,15" stroke="#ffff80" stroke-width="0.15" fill="none" opacity="0"/>
+            <path d="M65,45 L63,42 L61,39 L59,36 L57,33 L55,30 L53,27 L55,25 L60,20 L70,15 L80,10 L75,5 L85,0 L75,5 L65,0 L55,5 L45,10 L50,15 L40,20 L45,25 L35,30" stroke="#ffff80" stroke-width="0.15" fill="none" opacity="0"/>
             <circle class="lightning-dot" cx="65" cy="45" r="0.2" fill="#ffff80" opacity="0"/>
         </svg>
                     <!-- Lightning to bottom-left corner - starts from U bottom -->
@@ -101,7 +114,7 @@
                     </svg>
                     <!-- Lightning to right edge - starts from N right side -->
                     <svg class="lightning" id="lightning6" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <path d="M70,50 L72,50 L74,50 L76,50 L78,50 L80,50 L82,50 L84,50 L82,48 L88,42 L92,45" stroke="#ffff80" stroke-width="0.15" fill="none" opacity="0"/>
+                        <path d="M70,50 L72,48 L74,46 L76,44 L78,42 L80,40 L82,38 L84,36 L86,34 L88,32 L90,30 L88,28 L85,25 L82,22 L79,19 L76,16 L73,15 L70,15" stroke="#ffff80" stroke-width="0.15" fill="none" opacity="0"/>
                         <circle class="lightning-dot" cx="70" cy="50" r="0.2" fill="#ffff80" opacity="0"/>
                     </svg>
                     <!-- Lightning to top edge - starts from U top -->
@@ -157,29 +170,6 @@
         </div>
     </section>
 
-    <!-- Statistics Section -->
-    <section class="statistics">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">250+</div>
-                    <div class="stat-label">ОРГАНИЗОВАНО СОБЫТИЙ</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">3000+</div>
-                    <div class="stat-label">ДОВОЛЬНЫХ ГОСТЕЙ НА МЕРОПРИЯТИИ</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">2018</div>
-                    <div class="stat-label">ГОД НАЧАЛА<br>СОЗДАНИЯ СОБЫТИЙ</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">15</div>
-                    <div class="stat-label">ОРГАНИЗОВАННЫХ<br>ВИДОВ МЕРОПРИЯТИЙ</div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Services Section -->
     <section id="services" class="services">
@@ -237,6 +227,37 @@
         </div>
     </section>
 
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <div class="about-content">
+                <h2>ДАВАЙТЕ ПОЗНАКОМИМСЯ</h2>
+                <div class="about-wrapper">
+                    <div class="about-photo">
+                        <img src="images/team/Юлия.jpg" alt="Юлия Никитина" class="about-image">
+                        <div class="photo-arrow">
+                            <svg class="arrow-svg" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M40,80 Q40,50 40,40" stroke="rgba(255, 255, 255, 0.9)" stroke-width="8" fill="none" stroke-linecap="round"/>
+                                <polygon points="30,45 40,30 50,45" fill="rgba(255, 255, 255, 0.9)"/>
+                            </svg>
+                            <div class="arrow-text">Это я</div>
+                        </div>
+                    </div>
+                    <div class="about-text">
+                        <p>Меня зовут <strong>Юлия Никитина</strong>, я создатель ивент-агентства UNevent и контролирую качество каждого мероприятия лично.</p>
+                        
+                        <p><strong>С чего все начиналось:</strong><br>
+                        В 2018 году начался мой путь организатора мероприятий в Санкт-Петербурге. Начала я с организации свадеб, предварительно пройдя профильное обучение. Далее я работала в нескольких ивент-агентствах и систематично повышала квалификацию, обучаясь у лучших специалистов в ивент-сфере.</p>
+                        
+                        <p>Сегодня в моем агентстве есть штатные менеджеры, декоратор, дизайнер, технический специалист и координаторы проектов. О команде и истории агентства можно прочитать в разделе <strong>КОМАНДА</strong>.</p>
+                        
+                        <p>Ежегодно UNevent организует около 250 мероприятий разного формата: первый юбилей ребенка, классический день рождения, тематическая вечеринка в честь дня рождения, юбилей компании, тимбилдинг, гендерный праздник, сюрприз/розыгрыш. Вы можете ознакомиться с <strong>ПОРТФОЛИО</strong> проведенных мероприятий и выбрать подходящую для Вас <strong>ПРОГРАММУ</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Statistics Duplicate -->
     <section class="statistics-duplicate">
         <div class="container">
@@ -256,25 +277,6 @@
                 <div class="stat-item">
                     <div class="stat-number">15</div>
                     <div class="stat-label">ОРГАНИЗОВАННЫХ<br>ВИДОВ МЕРОПРИЯТИЙ</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="about">
-        <div class="container">
-            <div class="about-content">
-                <h2>ДАВАЙТЕ ПОЗНАКОМИМСЯ</h2>
-                <div class="about-text">
-                    <p>Меня зовут <strong>Юлия Никитина</strong>, я создатель ивент-агентства UNevent и контролирую качество каждого мероприятия лично.</p>
-                    
-                    <p><strong>С чего все начиналось:</strong><br>
-                    В 2018 году начался мой путь организатора мероприятий в Санкт-Петербурге. Начала я с организации свадеб, предварительно пройдя профильное обучение. Далее я работала в нескольких ивент-агентствах и систематично повышала квалификацию, обучаясь у лучших специалистов в ивент-сфере.</p>
-                    
-                    <p>Сегодня в моем агентстве есть штатные менеджеры, декоратор, дизайнер, технический специалист и координаторы проектов. О команде и истории агентства можно прочитать в разделе <strong>КОМАНДА</strong>.</p>
-                    
-                    <p>Ежегодно UNevent организует около 250 мероприятий разного формата: первый юбилей ребенка, классический день рождения, тематическая вечеринка в честь дня рождения, юбилей компании, тимбилдинг, гендерный праздник, сюрприз/розыгрыш. Вы можете ознакомиться с <strong>ПОРТФОЛИО</strong> проведенных мероприятий и выбрать подходящую для Вас <strong>ПРОГРАММУ</strong>.</p>
                 </div>
             </div>
         </div>

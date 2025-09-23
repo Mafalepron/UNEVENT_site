@@ -15,9 +15,11 @@ class LogoAnimations {
         this.eventCardsContainer = document.getElementById('eventCardsContainer');
         this.eventCards = document.querySelectorAll('.event-card');
         this.brightFlash = document.getElementById('lightningBrightFlash');
+        this.clickIndicator = document.getElementById('clickIndicator');
         
         this.isAnimating = false;
         this.isPulsing = false;
+        this.isLogoExpanded = false;
         this.lastFlashPosition = null;
         
         this.init();
@@ -25,6 +27,7 @@ class LogoAnimations {
     
     init() {
         this.setupEventListeners();
+        this.animateArrow();
     }
     
     setupEventListeners() {
@@ -50,22 +53,53 @@ class LogoAnimations {
         this.logoN.classList.remove('pulsing');
     }
     
+    expandLogo() {
+        // Add expanded class to both letters to keep them scaled up
+        this.logoU.classList.add('expanded');
+        this.logoN.classList.add('expanded');
+    }
+    
+    collapseLogo() {
+        // Remove expanded class from both letters to return to normal size
+        this.logoU.classList.remove('expanded');
+        this.logoN.classList.remove('expanded');
+    }
+    
     onLogoClick() {
         if (this.isAnimating) return;
         
-        this.isAnimating = true;
-        this.stopPulsing();
+        // Hide click indicator on first click
+        if (this.clickIndicator) {
+            this.clickIndicator.style.display = 'none';
+        }
         
-        // Reset all lightnings to hidden state
-        this.resetAllLightnings();
+        // Toggle logo expansion state
+        this.isLogoExpanded = !this.isLogoExpanded;
         
-        // Hide event cards first
-        this.hideEventCards();
-        
-        // Animate lightning effects
-        this.animateLightning();
-        
-        // Animation state will be reset automatically when sequence completes
+        if (this.isLogoExpanded) {
+            // Expand logo and start animation
+            this.expandLogo();
+            this.isAnimating = true;
+            this.stopPulsing();
+            
+            // Hide UNevent text when starting new animation
+            this.hideUneventText();
+            
+            // Reset all lightnings to hidden state
+            this.resetAllLightnings();
+            
+            // Hide event cards first
+            this.hideEventCards();
+            
+            // Animate lightning effects
+            this.animateLightning();
+        } else {
+            // Collapse logo and hide everything
+            this.collapseLogo();
+            this.hideUneventText();
+            this.resetAllLightnings();
+            this.hideEventCards();
+        }
     }
     
     animateLightning() {
@@ -101,6 +135,9 @@ class LogoAnimations {
         const lightning = lightnings[index];
         const path = lightning.querySelector('path');
         const dot = lightning.querySelector('.lightning-dot');
+        
+        // Debug: log which lightning is being animated
+        console.log(`Animating lightning ${index} (${lightning.id})`);
         
         // Start with dot visible at the beginning
         dot.style.opacity = '1';
@@ -270,6 +307,38 @@ class LogoAnimations {
         });
     }
     
+
+    createLightningFlashAtCardPosition(lightningIndex) {
+        const eventCard = this.eventCards[lightningIndex];
+        if (eventCard) {
+            // Get the actual position of the card
+            const cardRect = eventCard.getBoundingClientRect();
+            const containerRect = this.lightningContainer.getBoundingClientRect();
+            
+            // Calculate relative position within the container
+            const relativeX = ((cardRect.left - containerRect.left) / containerRect.width) * 100;
+            const relativeY = ((cardRect.top - containerRect.top) / containerRect.height) * 100;
+            
+            // Create flash element at card position
+            const flash = document.createElement('div');
+            flash.className = 'lightning-flash';
+            flash.style.position = 'absolute';
+            flash.style.left = relativeX + '%';
+            flash.style.top = relativeY + '%';
+            this.lightningContainer.appendChild(flash);
+            
+            // Debug: log flash position
+            console.log(`Flash ${lightningIndex} position at card:`, relativeX + '%', relativeY + '%');
+            
+            // Remove flash after animation
+            setTimeout(() => {
+                if (flash.parentNode) {
+                    flash.parentNode.removeChild(flash);
+                }
+            }, 2000);
+        }
+    }
+
     createLightningFlash(endPoint, lightningIndex, onComplete) {
         // Create flash element
         const flash = document.createElement('div');
@@ -344,6 +413,9 @@ class LogoAnimations {
     showEventCard(lightningIndex, endPoint) {
         const eventCard = this.eventCards[lightningIndex];
         if (eventCard) {
+            // Debug: log which card is being positioned
+            console.log(`Lightning ${lightningIndex} - Card:`, eventCard.dataset.event);
+            
             // Use the exact coordinates where lightning ended
             let finalX = endPoint.x;
             let finalY = endPoint.y;
@@ -369,9 +441,10 @@ class LogoAnimations {
             finalX = Math.max(10, Math.min(90, finalX)); // Keep away from edges with more margin
             finalY = Math.max(15, Math.min(80, finalY)); // Keep away from header and footer with more margin
             
-            // Special positioning for Corporate Events card (lightning2) - return to original position
+            // Special positioning for Corporate Events card (lightning2) - move up by 2 card heights and left by 1 card width
             if (lightningIndex === 1) { // Corporate Events card is index 1 (0-based)
-                // No special positioning - use original lightning end point
+                finalY = Math.max(15, finalY - 20); // Move up by 20% (2 card heights total) but keep within bounds
+                finalX = Math.max(10, finalX - 10); // Move left by 10% (1 card width) but keep within bounds
             }
             
             // Special positioning for Multimedia card (lightning3) - place under letter "U" and closer to bottom, then lower by half card height
@@ -390,10 +463,18 @@ class LogoAnimations {
                 finalX = Math.max(5, finalX - 20); // Move left by 20% (2x card width + half card width + half card width) but keep within bounds
             }
             
-            // Special positioning for Quests card (lightning6) - move down by card height + 1/3 card height - 1/4 card height and left by 1/3 card width
+            // Special positioning for Quests card (lightning6) - use exact lightning end position
             if (lightningIndex === 5) { // Quests card is index 5 (0-based)
-                finalY = Math.min(80, finalY + 10); // Move down by 10% (card height + 1/3 card height - 1/4 card height) but keep within bounds
-                finalX = Math.max(10, finalX - 3); // Move left by 3% (1/3 card width) but keep within bounds
+                finalX = 70; // Exact position where lightning ends
+                finalY = 15; // Exact position where lightning ends
+            }
+            
+            // Special positioning for Intellectual card (lightning7) - move left by half card width and up by half card height
+            if (lightningIndex === 6) { // Intellectual card is index 6 (0-based)
+                console.log('Positioning Intellectual card - before:', finalX, finalY);
+                finalY = 10; // Fixed position - up by half card height from original
+                finalX = 5; // Fixed position - left by half card width from original
+                console.log('Positioning Intellectual card - after:', finalX, finalY);
             }
             
             // Special positioning for Training card (lightning8) - move up by half card height and left by 1.5 card width
@@ -471,23 +552,63 @@ class LogoAnimations {
                 if (letterElement) {
                     letterElement.classList.add('animate');
                     currentLetter++;
-                    setTimeout(animateNextLetter, 400); // Delay between letters
+                    setTimeout(animateNextLetter, 600); // Delay between letters
                 }
-            } else {
-                // All letters animated, hide text after 3 seconds
-                setTimeout(() => {
-                    letters.forEach(letterId => {
-                        const letterElement = document.getElementById(letterId);
-                        if (letterElement) {
-                            letterElement.style.opacity = '0';
-                        }
-                    });
-                }, 3000);
             }
+            // Text remains visible until user clicks on UN logo
         };
         
         // Start animation
         animateNextLetter();
+    }
+    
+    hideUneventText() {
+        const letters = ['letterU', 'letterN', 'letterE1', 'letterV', 'letterE2', 'letterN2', 'letterT'];
+        letters.forEach(letterId => {
+            const letterElement = document.getElementById(letterId);
+            if (letterElement) {
+                letterElement.style.opacity = '0';
+                letterElement.classList.remove('animate');
+            }
+        });
+    }
+    
+    animateArrow() {
+        if (!this.clickIndicator) {
+            console.log('Click indicator not found');
+            return;
+        }
+        
+        console.log('Starting arrow animation');
+        
+        // Reset animation state
+        this.clickIndicator.classList.remove('animate', 'reverse');
+        
+        // Force reflow to ensure reset
+        this.clickIndicator.offsetHeight;
+        
+        // Start forward animation after a brief delay
+        setTimeout(() => {
+            console.log('Adding animate class');
+            this.clickIndicator.classList.add('animate');
+        }, 100);
+        
+        // Start reverse animation (path disappears first, then cursor)
+        setTimeout(() => {
+            console.log('Adding reverse class');
+            this.clickIndicator.classList.add('reverse');
+        }, 3600); // Start reverse after 3.6s (when cursor is fully visible)
+        
+        // Complete reset after reverse animation
+        setTimeout(() => {
+            console.log('Removing animation classes');
+            this.clickIndicator.classList.remove('animate', 'reverse');
+        }, 4500); // Total animation time: 4.5s
+        
+        // Repeat animation every 5 seconds
+        setTimeout(() => {
+            this.animateArrow();
+        }, 5000);
     }
 }
 
